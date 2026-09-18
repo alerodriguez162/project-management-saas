@@ -1,14 +1,12 @@
 # Mesa — Project Management SaaS
 
-Base de un SaaS de gestión de proyectos (workspaces, proyectos y tableros) para **Apex Bench**.
-
-Esta entrega es solo el scratch: monorepo, health API y shell del cliente. Sin CRUD todavía.
+SaaS de gestión de proyectos (workspaces, proyectos y tableros) para **Apex Bench**.
 
 ## Stack
 
 - **Frontend:** React + TypeScript + Vite
 - **Backend:** Node.js + Express + TypeScript
-- **Siguiente persistencia:** SQLite (`better-sqlite3`)
+- **Database:** SQLite (`better-sqlite3`) en `server/data/mesa.db`
 
 ## Daily plan
 
@@ -23,11 +21,22 @@ Esta entrega es solo el scratch: monorepo, health API y shell del cliente. Sin C
 
 Workflow: una rama por día → merge a `main` al final del día.
 
-## API (Day 1)
+## API (Day 2)
 
 | Method | Path | Description |
 |--------|------|-------------|
 | GET | `/api/health` | Health check |
+| GET | `/api/workspaces` | List workspaces |
+| POST | `/api/workspaces` | Create workspace (`name`, `ownerEmail`) |
+| GET | `/api/workspaces/:id` | Get workspace |
+| PATCH | `/api/workspaces/:id` | Update name |
+| DELETE | `/api/workspaces/:id` | Delete workspace |
+| GET | `/api/workspaces/:id/members` | List members |
+| POST | `/api/workspaces/:id/members` | Add member (`email`, `role`) |
+| PATCH | `/api/workspaces/:id/members/:memberId` | Change role |
+| DELETE | `/api/workspaces/:id/members/:memberId` | Remove member |
+
+Workspace fields: `name`, `slug`, `memberCount`. Roles: `owner` \| `admin` \| `member`. El workspace debe conservar al menos un owner.
 
 ## Getting started
 

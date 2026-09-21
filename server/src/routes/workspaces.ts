@@ -7,6 +7,7 @@ import {
   deleteWorkspace,
   getMembershipById,
   getWorkspaceById,
+  getWorkspaceStats,
   listMemberships,
   listWorkspaces,
   membershipEmailTaken,
@@ -14,6 +15,7 @@ import {
   updateWorkspace,
 } from '../db.js'
 import { WORKSPACE_ROLES, type WorkspaceRole } from '../types.js'
+import projectsRouter from './projects.js'
 
 const router = Router()
 
@@ -68,6 +70,15 @@ router.post('/', (req, res) => {
 
   const workspace = createWorkspace({ name, ownerEmail })
   res.status(201).json(workspace)
+})
+
+router.get('/:id/stats', (req, res) => {
+  const stats = getWorkspaceStats(req.params.id)
+  if (!stats) {
+    res.status(404).json({ error: 'Workspace not found' })
+    return
+  }
+  res.json(stats)
 })
 
 router.get('/:id', (req, res) => {
@@ -188,5 +199,7 @@ router.delete('/:id/members/:memberId', (req, res) => {
   deleteMembership(workspaceId, memberId)
   res.status(204).send()
 })
+
+router.use('/:id/projects', projectsRouter)
 
 export default router

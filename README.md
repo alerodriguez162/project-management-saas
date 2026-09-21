@@ -1,42 +1,36 @@
 # Mesa — Project Management SaaS
 
-SaaS de gestión de proyectos (workspaces, proyectos y tableros) para **Apex Bench**.
+SaaS de gestión de proyectos para **Apex Bench**: workspaces, miembros, proyectos y tablero de issues.
 
 ## Stack
 
-- **Frontend:** React + TypeScript + Vite
+- **Frontend:** React + TypeScript + Vite + React Router
 - **Backend:** Node.js + Express + TypeScript
 - **Database:** SQLite (`better-sqlite3`) en `server/data/mesa.db`
 
-## Daily plan
+## Producto
 
-| Day | Branch | Focus |
-|-----|--------|--------|
-| 1 | `day-1-scaffold` | Monorepo, health API, shell del cliente |
-| 2 | `day-2-workspaces` | Workspaces, miembros y persistencia |
-| 3 | `day-3-projects` | Proyectos y listado en el cliente |
-| 4 | `day-4-boards` | Issues, columnas y tablero |
-| 5 | `day-5-features` | Asignación, filtros y detalle |
-| 6 | `day-6-polish` | Validación, errores y polish |
+- Workspaces con owner, admins y miembros
+- Proyectos con clave corta (`MOB-1`, `API-2`)
+- Tablero kanban (backlog → hecho), asignación, filtros y detalle
+- Persistencia local SQLite; borrar un workspace o proyecto cascada los issues
 
-Workflow: una rama por día → merge a `main` al final del día.
-
-## API (Day 2)
+## API
 
 | Method | Path | Description |
 |--------|------|-------------|
 | GET | `/api/health` | Health check |
-| GET | `/api/workspaces` | List workspaces |
-| POST | `/api/workspaces` | Create workspace (`name`, `ownerEmail`) |
-| GET | `/api/workspaces/:id` | Get workspace |
-| PATCH | `/api/workspaces/:id` | Update name |
-| DELETE | `/api/workspaces/:id` | Delete workspace |
-| GET | `/api/workspaces/:id/members` | List members |
-| POST | `/api/workspaces/:id/members` | Add member (`email`, `role`) |
-| PATCH | `/api/workspaces/:id/members/:memberId` | Change role |
-| DELETE | `/api/workspaces/:id/members/:memberId` | Remove member |
+| GET/POST | `/api/workspaces` | List / create (`name`, `ownerEmail`) |
+| GET/PATCH/DELETE | `/api/workspaces/:id` | Workspace |
+| GET | `/api/workspaces/:id/stats` | Counts |
+| GET/POST | `/api/workspaces/:id/members` | Members (`email`, `role`) |
+| PATCH/DELETE | `/api/workspaces/:id/members/:memberId` | Role / remove |
+| GET/POST | `/api/workspaces/:id/projects` | Projects (`name`, `key`, `description`) |
+| GET/PATCH/DELETE | `/api/workspaces/:id/projects/:projectId` | Project |
+| GET/POST | `/api/workspaces/:id/projects/:projectId/issues` | Issues (`?status=&priority=&assignee=&q=`) |
+| GET/PATCH/DELETE | `/api/workspaces/:id/projects/:projectId/issues/:issueId` | Issue |
 
-Workspace fields: `name`, `slug`, `memberCount`. Roles: `owner` \| `admin` \| `member`. El workspace debe conservar al menos un owner.
+Roles: `owner` \| `admin` \| `member`. Estados: `backlog` \| `todo` \| `in_progress` \| `done`. El workspace debe conservar al menos un owner.
 
 ## Getting started
 
